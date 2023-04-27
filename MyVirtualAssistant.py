@@ -59,7 +59,7 @@ while True:
         brain = "Tôi không hiểu!\n"
 
     elif "chào" in you:
-        brain = "Rất vui khi gặp bạn!\n"
+        brain = "Chào bạn, tôi có thể giúp gì?\n"
 
     elif "tên" in you: 
         brain = "Tôi là Bảo, một nô lệ của bạn!\n"
@@ -97,4 +97,4 @@ while True:
         brain = "Tôi khỏe cảm ơn còn bạn!\n"
 
     print ("Robot: " + brain)
-    textToSpeech(brain) 
+    textToSpeech(brain)
