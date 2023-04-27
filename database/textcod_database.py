@@ -6,6 +6,11 @@ ketnoi  = pyodbc.connect('DRIVER={ODBC Driver 18 for SQL Server}; SERVER=DESKTOP
 
 curser = ketnoi.cursor()
 
-for i in curser.execute("select * from userr"):
-    print(i.ten)
-    print(i.tuoi)
+curser.execute("insert userr values(N'text_2',N'text_2 mat khau')")
+ketnoi.commit()
+
+a =  curser.execute("select * from userr")
+b = a.fetchall()
+
+
+print(b)
