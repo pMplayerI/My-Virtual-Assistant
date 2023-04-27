@@ -62,7 +62,7 @@ while True:
         brain = "Rất vui khi gặp bạn!\n"
 
     elif "tên" in you: 
-        brain = "Tôi là Bảo, một nô lệ của bạn!\n"
+        brain = "Tôi là phuong, một nô lệ của bạn!\n"
 
     elif "không nghe" in you or "nói lại" in you:
         brain = remember
