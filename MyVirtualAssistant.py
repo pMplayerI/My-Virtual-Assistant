@@ -1,96 +1,196 @@
-import pyttsx3
-import speech_recognition
-import pyaudio
-import playsound
+import speech_recognition as sr
 import os
 import webbrowser
-from datetime import date, datetime
+import playsound
 from gtts import gTTS
+from datetime import date, datetime
 
-def textToSpeech(brain):
+# Sửa làm chó
+suaLamCho = "Bảo"
+now = datetime.now()
+
+# Nghe, hiểu và nói
+def listen():
+    ear = sr.Recognizer()
+    with sr.Microphone() as mic:
+        print("Robot: Tôi đang lắng nghe!")
+        # Lọc tiếng ồn
+        ear.adjust_for_ambient_noise(mic)
+        audio = ear.listen(mic)
+    print("Robot: ...")
+    try:
+        text = ear.recognize_google(audio, language="vi-VN")
+        print("You: " +text)
+        return text
+    except:
+        text = "..."
+        print("You: " +text)
+        return text
+    
+def understand():  
+    text = listen()
+    return text
+
+def speak(brain):
+    print("Robot: " +brain+ "\n")
     output = gTTS(brain, lang="vi", slow=False)
     output.save("voice.mp3")
     playsound.playsound("voice.mp3", True)  
     # Không xóa là lỗi
     os.remove("voice.mp3")
 
-ear = speech_recognition.Recognizer()
-mouth = pyttsx3.init()
-brain = "Chào mừng quay lại, thưa chủ nhân!"
-suaLamCho = "Bảo"
+# Các chức năng chính
+def hello(name):
+    dayTime = int(now.strftime("%H"))
+    if 6 <= dayTime < 12:
+        brain = "Chào bạn " +name+ "! Chúc bạn một buổi sáng tốt lành!"
+        speak(brain)
+    elif 12 <= dayTime < 18:
+        brain = "Chào bạn " +name+ "! Chúc bạn một buổi chiều tốt lành!"
+        speak(brain)
+    else:
+        brain = "Chào bạn " +name+ "! Chúc bạn một buổi tối tốt lành!"
+        speak(brain)
 
-print("Robot: " +brain)
-textToSpeech(brain)
+def getToday():
+    today = date.today()
+    brain = today.strftime("Hôm nay là ngày %d tháng %m năm %Y.")
+    speak(brain)
 
-while True:
-    # Nhớ lại những gì đã nói
-    remember = brain 
+def getTime():
+    brain = now.strftime("%H:%M:%S")
+    speak(brain)
 
-    with speech_recognition.Microphone() as mic:
-        print("Robot: Tôi đang lắng nghe!")
-        # Khoảng trễ nhận mic
-        ear.pause_threshold = 1
-        # Lọc tiếng ồn
-        ear.adjust_for_ambient_noise(mic)
-        audio = ear.listen(mic)
+def searching(text):
+    search = text.split("kiếm", 1)[1]
+    brain = "Đang tìm kiếm!"
+    speak(brain)
+    url = "https://www.google.com.tr/search?q=" +search
+    webbrowser.open(url, new=1)
+    brain = "Đã tìm kiếm thành công!"
+    speak(brain)
 
-    print("Robot: ...")
+def openWebsite(text):
+    # Lấy dấu cách là không tìm được
+    search = text.split("mở ", 1)[1]
+    brain = "Đang mở trang web!"
+    speak(brain)
+    url = "https://www." +search
+    webbrowser.open(url, new=1)
+    brain = "Trang web bạn yêu cầu đã được mở!"
+    speak(brain)
 
-    try:
-        you = ear.recognize_google(audio, language="vi-VN")
-    except:
-        you = "..."
+def openApp(text):
+    if "google" in text or "chrome" in text:
+        brain = "Đang mở Google Chrome!"
+        speak(brain)
+        os.startfile("C:\Program Files\Google\Chrome\Application\chrome.exe")
+        brain = "Google Chrome đã được mở!"
+        speak(brain)
 
-    print("You: " +you)
+    elif "code" in text:
+        brain = "Đang mở Visual Studio Code!"
+        speak(brain)
+        # Có cái r đó máy t mới mở được
+        os.startfile(r"C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\Code.exe")
+        brain = "Visual Studio Code đã được mở!"
+        speak(brain)
 
-    # Phần AI
-    if "tạm biệt" in you:
-        brain = "Hẹn gặp lại!"
-        print ("Robot: " +brain+ "\n")
-        textToSpeech(brain)
-        # Kết thúc chương trình
-        break
-
-    elif you == "...":
-        brain = "Tôi không hiểu!"
-
-    elif "chào" in you:
-        brain = "Chào bạn, tôi có thể giúp gì?"
-
-    elif "tên" in you: 
-        brain = "Tôi là " +suaLamCho+ ", một nô lệ của bạn!"
-
-    elif "không nghe" in you or "nói lại" in you:
-        brain = remember
-
-    elif "nghe" in you:
-        brain = "Vâng, tôi vẫn đang lắng nghe!"
-
-    elif "tốt" in you or "giỏi" in you or "cảm ơn" in you:
-        brain = "Ok baby!"
-    
-    elif "ngày" in you:
-        today = date.today()
-        brain = today.strftime("Hôm nay là: ngày %d tháng %m năm %Y")
-
-    elif "giờ" in you:
-        now = datetime.now();
-        brain = now.strftime("%H:%M:%S")
-
-    elif "Google" in you or "Chrome" in you:
-        webbrowser.open("https://www.google.com/", new=1)
-        brain = "Google đã được mở!"
-
-    elif "YouTube" in you:
-        webbrowser.open("https://www.youtube.com", new=1)
-        brain = "Youtube đã được mở!"
-
-    elif "Facebook" in you:
-        webbrowser.open("https://www.facebook.com/", new=1)
-        brain = "Facebook đã được mở!"
+    elif "game" in text:
+        brain = "Đang mở LMHT!"
+        speak(brain)
+        os.startfile("D:\Riot Games\Riot Client\RiotClientServices.exe")
+        brain = "Chơi game ít thôi!"
+        speak(brain)
 
     else:
-        brain = "Tôi khỏe cảm ơn còn bạn!"
+        brain = "404 not found!"
+        speak(brain)
 
-    print ("Robot: " +brain+ "\n")
-    textToSpeech(brain)
+# Tán gẫu
+def opening(name):
+    brain = "Chào bạn " +name+ "!"
+    speak(brain)
+    brain = "Tôi có thể giúp gì cho bạn?"
+    speak(brain)
+
+def stop():
+    brain = "Hẹn gặp lại!"
+    speak(brain)
+
+def noisy():
+    brain = "Tôi không nghe rõ! Bạn có thể nhắc lại được không?"
+    speak(brain)
+
+def baoNgu():
+    brain = "Tôi là " +suaLamCho+ ", một nô lệ của bạn!"
+    speak(brain)
+
+def stillListening():
+    brain = "Vâng, tôi vẫn đang lắng nghe!"
+    speak(brain)
+
+def compliment():
+    brain = "Ok baby!"
+    speak(brain)
+
+def nope():
+    brain = "Tôi khỏe cảm ơn còn bạn!"
+    speak(brain)
+
+# AI
+def ai():
+    # Mở đầu
+    brain = "Xin chào, bạn tên là gì?"
+    speak(brain)
+    name = understand()
+    opening(name)
+
+    while True:
+        # Cho chữ thường hết cho dễ
+        text = understand().lower()
+
+        # Xử lý các chức năng chính
+        if "chào" in text:
+            hello(name)
+        
+        elif "ngày" in text:
+            getToday()
+
+        elif "giờ" in text:
+            getTime()
+
+        elif "mở" in text:
+            if "." in text:
+                openWebsite(text)
+
+            elif "tìm kiếm" in text:
+                searching(text)
+
+            else:
+                openApp(text)   
+
+        # Xử lý tán gẫu
+        elif "tạm biệt" in text:
+            stop()
+            # Ngừng chương trình
+            break
+
+        elif text == "...":
+            noisy()
+
+        elif "tên" in text: 
+            baoNgu()
+
+        elif "nghe" in text:
+            stillListening()
+
+        elif "tốt" in text or "giỏi" in text or "cảm ơn" in text:
+            compliment()
+
+        # Hỏi gì khó vậy 3
+        else:
+            nope()
+
+# Chạy chương trình
+ai()
