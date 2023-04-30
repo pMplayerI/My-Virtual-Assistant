@@ -4,9 +4,10 @@ import webbrowser
 import playsound
 from gtts import gTTS
 from datetime import date, datetime
+import smtplib
 
-# Sửa làm chó
-suaLamCho = "Bảo"
+# Tên bot
+botName = "Bảo"
 now = datetime.now()
 
 # Nghe, hiểu và nói
@@ -19,13 +20,12 @@ def listen():
         audio = ear.listen(mic)
     print("Robot: ...")
     try:
-        text = ear.recognize_google(audio, language="vi-VN")
-        print("You: " +text)
-        return text
+        text = ear.recognize_google(audio, language="vi-VN")      
     except:
         text = "..."
-        print("You: " +text)
-        return text
+
+    print("You: " +text)
+    return text
     
 def understand():  
     text = listen()
@@ -107,11 +107,44 @@ def openApp(text):
         brain = "404 not found!"
         speak(brain)
 
+def sendEmail():
+    sender = "primegaming737@gmail.com"
+    # Đây là mật khẩu ứng dụng
+    password = "cklylijydznawvwf"
+
+    brain = "Bạn muốn gửi email đến ai?"
+    speak(brain)
+    receiver = understand()
+
+    if "tôi" in receiver:
+        brain = "Nội dung của email là gì?"
+        speak(brain)
+        content = understand()
+        message = "Subject: %s\n\n%s"%("Email tự động", content)
+        brain = "Email đang được gửi!"
+        speak(brain)
+
+        session = smtplib.SMTP("smtp.gmail.com", 587)
+        # Xác minh email với smtp gmail client
+        session.ehlo()
+        # Bảo mật email với tls encryption
+        session.starttls()
+        session.login(sender, password)  
+        session.sendmail(sender, "cusstop386@gmail.com", message.encode("utf-8"))
+        session.close()
+
+        brain = "Đã gửi email thành công!"
+        speak(brain)
+
+    else:
+        brain = "Không thành công!"
+        speak(brain)
+
+
+
 # Tán gẫu
 def opening(name):
-    brain = "Chào bạn " +name+ "!"
-    speak(brain)
-    brain = "Tôi có thể giúp gì cho bạn?"
+    brain = "Chào bạn " +name+ "! Tôi có thể giúp gì cho bạn?"
     speak(brain)
 
 def stop():
@@ -123,7 +156,7 @@ def noisy():
     speak(brain)
 
 def baoNgu():
-    brain = "Tôi là " +suaLamCho+ ", một nô lệ của bạn!"
+    brain = "Tôi là " +botName+ ", một nô lệ của bạn!"
     speak(brain)
 
 def stillListening():
@@ -169,6 +202,9 @@ def ai():
 
             else:
                 openApp(text)   
+
+        elif "mail" in text:
+            sendEmail()
 
         # Xử lý tán gẫu
         elif "tạm biệt" in text:
