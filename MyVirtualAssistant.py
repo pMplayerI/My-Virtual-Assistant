@@ -8,7 +8,7 @@ import smtplib
 import pyjokes
 from deep_translator import GoogleTranslator
 import requests
-import json
+import pywhatkit as pwt
 
 # Tên bot
 botName = "Bảo"
@@ -18,19 +18,23 @@ def listen():
     ear = sr.Recognizer()
     with sr.Microphone() as mic:
         print("Robot: Tôi đang lắng nghe!")
+
         # Lọc tiếng ồn
         ear.adjust_for_ambient_noise(mic)
         audio = ear.listen(mic)
+
     print("Robot: ...")
+
     try:
-        you = ear.recognize_google(audio, language="vi-VN")      
+        you = ear.recognize_google(audio, language="vi-VN")
+
     except:
         you = "..."
-
+    
     print("You: " +you)
     return you
     
-def understand():  
+def understand():
     brain = listen()
     return brain
 
@@ -46,11 +50,13 @@ def speak(brain):
 def hello(name):
     dayTime = int(datetime.now().strftime("%H"))
     if 6 <= dayTime < 12:
-        speak("Chào bạn " +name+ "! Chúc bạn một buổi sáng tốt lành!")
+        speak("Chào " +name+ "! Chúc bạn một buổi sáng tốt lành!")
+
     elif 12 <= dayTime < 18:
-        speak("Chào bạn " +name+ "! Chúc bạn một buổi chiều tốt lành!")
+        speak("Chào " +name+ "! Chúc bạn một buổi chiều tốt lành!")
+
     else:
-        speak("Chào bạn " +name+ "! Chúc bạn một buổi tối tốt lành!")
+        speak("Chào " +name+ "! Chúc bạn một buổi tối tốt lành!")
 
 def getToday(): 
     speak(date.today().strftime("Hôm nay là ngày %d tháng %m năm %Y."))
@@ -61,17 +67,22 @@ def getTime():
 def searching(text):
     search = text.split("kiếm", 1)[1]
     speak("Đang tìm kiếm!")
-    url = "https://www.google.com.tr/search?q=" +search
+    url = "https://www.google.com/search?q=" +search
     webbrowser.open(url, new=1)
     speak("Đã tìm kiếm thành công!")
 
 def openWebsite(text):
-    # Lấy dấu cách là không tìm được
-    search = text.split("mở ", 1)[1]
-    speak("Đang mở trang web!")
+    try:
+        # Lấy dấu cách là không tìm được
+        search = text.split("cập ", 1)[1]
+
+    except:
+        search = "google.com"
+        
+    speak("Đang truy cập trang web!")
     url = "https://www." +search
     webbrowser.open(url, new=1)
-    speak("Trang web bạn yêu cầu đã được mở!")
+    speak("Trang web bạn yêu cầu đã được truy cập!")
 
 def openApp(text):
     if "google" in text or "chrome" in text:
@@ -97,6 +108,17 @@ def openApp(text):
 
     else:
         speak("Không tìm thấy ứng dụng!")
+
+def playSong():
+    speak("Bạn muốn nghe gì?")
+    song = understand()
+    if song == "...":
+        song = "never gonna give you up"
+
+    speak("Đang tìm kiếm kết quả!")
+    pwt.playonyt(song)
+    speak("Bài hát bạn yêu cầu đã được mở!")
+
 
 def sendEmail():
     sender = "primegaming737@gmail.com"
@@ -129,7 +151,6 @@ def sendEmail():
 
 def weather():
     speak("Bạn muốn xem thời tiết ở địa điểm nào?")
-
     city = understand()
     if city == "...":
         city = "Thành phố Hồ Chí Minh"
@@ -150,7 +171,7 @@ def weather():
 
         wthr = data["weather"]
         weather_description = wthr[0]["description"]
-        
+            
         speak("\nHôm nay ở " +city+ " sẽ có " +GoogleTranslator(source="auto", target="vi").translate(weather_description)+ "\nMặt trời mọc vào lúc " +str(sunrise.hour)+ " giờ " +str(sunrise.minute)+ " phút\nMặt trời lặn vào lúc " +str(sunset.hour)+ " giờ " +str(sunset.minute)+ " phút\nNhiệt độ trung bình là " +str(current_temperature)+ " độ C\nÁp suất không khí là " +str(current_pressure)+ " Pa\nĐộ ẩm là " +str(current_humidity)+ "%")
 
     else:
@@ -158,7 +179,7 @@ def weather():
 
 # Tán gẫu
 def opening(name):
-    speak("Chào bạn " +name+ "! Tôi có thể giúp gì cho bạn?")
+    speak("Chào " +name+ "! Tôi có thể giúp gì cho bạn?")
 
 def stop():
     speak("Hẹn gặp lại!")
@@ -189,14 +210,30 @@ def ai():
     # Mở đầu
     speak("Xin chào, bạn tên là gì?")
     name = understand()
-    opening(name)
+    if name == "...":
+        name = "người dùng"
 
+    opening(name)
+    i = 0
     while True:
         # Cho chữ thường hết cho dễ
         text = understand().lower()
 
         # Xử lý các chức năng chính
-        if "chào" in text:
+        if text == "...":
+            i += 1
+            # Đủ 3 lần sẽ ngừng chương trình
+            if i == 3:
+                stop()
+                break
+            noisy()
+
+        elif "tạm biệt" in text:
+            # Ngừng chương trình
+            stop()
+            break
+
+        elif "chào" in text:
             hello(name)
         
         elif "ngày" in text:
@@ -205,15 +242,17 @@ def ai():
         elif "giờ" in text:
             getTime()
 
+        elif "tìm kiếm" in text:
+            searching(text)
+
+        elif "truy cập" in text:
+            openWebsite(text)
+
         elif "mở" in text:
-            if "." in text:
-                openWebsite(text)
+            openApp(text) 
 
-            elif "tìm kiếm" in text:
-                searching(text)
-
-            else:
-                openApp(text)   
+        elif "nhạc" in text:
+            playSong() 
 
         elif "mail" in text:
             sendEmail()
@@ -222,14 +261,6 @@ def ai():
             weather()
 
         # Xử lý tán gẫu
-        elif "tạm biệt" in text:
-            stop()
-            # Ngừng chương trình
-            break
-
-        elif text == "...":
-            noisy()
-
         elif "tên" in text: 
             baoNgu()
 
