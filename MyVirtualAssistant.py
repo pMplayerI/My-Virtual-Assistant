@@ -11,6 +11,7 @@ import requests
 import pywhatkit as pwt
 import random
 import ctypes
+from bs4 import BeautifulSoup
 
 # Tên bot
 botName = "Bảo"
@@ -74,14 +75,14 @@ def searching(text):
     speak("Đã tìm kiếm thành công!")
 
 def openWebsite(text):
+    speak("Đang truy cập trang web!")
     try:
         # Lấy dấu cách là không tìm được
         search = text.split("cập ", 1)[1]
 
     except:
         search = "google.com"
-        
-    speak("Đang truy cập trang web!")
+    
     url = "https://www." +search
     webbrowser.open(url, new=1)
     speak("Trang web bạn yêu cầu đã được truy cập!")
@@ -180,34 +181,57 @@ def weather():
         speak("Không tìm thấy địa điểm của bạn!")
 
 def wallpaper():
-    speak("Bạn muốn hình nền theo chủ đề gì?")
+    speak("Bạn muốn thay đổi hình nền theo chủ đề gì?")
     query = understand()
-    if query == "...":
-        query = "flower"
     # Tìm hình nền theo tiếng Việt nó cứ sao sao ấy
     theme = GoogleTranslator(source="auto", target="en").translate(query)
 
     speak("Đang thay đổi hình nền!")
-    url = "https://api.pexels.com/v1/search?per_page=1&page=" +str(random.randint(1,99))+ "&query=" +theme
-    # Cái headers là nó xác thực cái api key (maybe)
-    res = requests.get(url, headers={"Authorization": "IcYG6vQolq3GauSW2Y1DSB95fiIEajpP3zBaf0ocXSb5XIYwJNzBmka3"})
-    
-    if res.status_code == 200:
-        # Lấy url của hình từ response của trang web
-        img_url = res.json().get("photos")[0]["src"]["original"]
-        # Tạo request để lấy hình
-        img = requests.get(img_url)
-        # Tải và lưu ảnh về ở C:\Users\Admin
-        # Cái wb là chế độ khi tải cái mới thì nó sẽ thay thế cái cũ
-        with open("temp.jpg", "wb") as image:
-            image.write(img.content)
-    else:
-        print("Thay đổi hình nền không thành công!")
+    try:
+        url = "https://api.pexels.com/v1/search?per_page=1&page=" +str(random.randint(1,99))+ "&query=" +theme
+        # Cái headers là nó xác thực cái api key (maybe)
+        res = requests.get(url, headers={"Authorization": "IcYG6vQolq3GauSW2Y1DSB95fiIEajpP3zBaf0ocXSb5XIYwJNzBmka3"})
+        
+        if res.status_code == 200:
+            # Lấy url của hình từ response của trang web
+            img_url = res.json().get("photos")[0]["src"]["original"]
+            # Tạo request để lấy hình
+            img = requests.get(img_url)
+            # Tải và lưu ảnh về ở C:\Users\Admin
+            # Cái wb là chế độ khi tải cái mới thì nó sẽ thay thế cái cũ
+            with open("temp.jpg", "wb") as image:
+                image.write(img.content)
 
-    path = os.getcwd()+"\\temp.jpg"
-    # Cái này để thay đổi hình nền của máy
-    ctypes.windll.user32.SystemParametersInfoW(20,0,path,0)
-    speak("Hình nền đã được thay đổi!")
+        # Cái này để thay đổi hình nền của máy
+        ctypes.windll.user32.SystemParametersInfoW(20, 0, os.getcwd()+"\\temp.jpg", 0)
+        speak("Hình nền đã được thay đổi!")
+
+    except:
+        speak("Thay đổi hình nền không thành công!")
+
+def newspaper():
+    speak("Bạn muốn nghe tin tức theo chủ đề gì?")
+    keyword = understand()
+
+    speak("Đang tìm kiếm!")
+    try:
+        response = requests.get("https://tuoitre.vn/tim-kiem.htm?keywords=" +keyword)
+        soup = BeautifulSoup(response.content, "html.parser")
+        link = soup.find("a",{"class":"box-category-link-title"}).get("href")
+        news = requests.get("https://tuoitre.vn" +link)
+
+        soup = BeautifulSoup(news.content, "html.parser")
+        title = soup.find("h1", class_="article-title").text.strip()
+        description = soup.find("h2", class_="detail-sapo").text.strip()
+        body = soup.find("div", class_="detail-cmain")
+
+        speak(title)
+        speak(description)   
+        for content in body.find_all("p"):
+            speak(content.text.strip())
+
+    except:
+        speak("Không tìm thấy chủ đề hoặc tin phù hợp!")
 
 # Tán gẫu
 def opening(name):
@@ -294,6 +318,9 @@ def ai():
 
         elif "nền" in text:
             wallpaper()
+
+        elif "báo" in text or "tin tức" in text:
+            newspaper()
 
         # Xử lý tán gẫu
         elif "tên" in text: 
