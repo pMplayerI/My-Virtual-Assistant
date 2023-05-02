@@ -9,6 +9,8 @@ import pyjokes
 from deep_translator import GoogleTranslator
 import requests
 import pywhatkit as pwt
+import random
+import ctypes
 
 # Tên bot
 botName = "Bảo"
@@ -177,6 +179,36 @@ def weather():
     else:
         speak("Không tìm thấy địa điểm của bạn!")
 
+def wallpaper():
+    speak("Bạn muốn hình nền theo chủ đề gì?")
+    query = understand()
+    if query == "...":
+        query = "flower"
+    # Tìm hình nền theo tiếng Việt nó cứ sao sao ấy
+    theme = GoogleTranslator(source="auto", target="en").translate(query)
+
+    speak("Đang thay đổi hình nền!")
+    url = "https://api.pexels.com/v1/search?per_page=1&page=" +str(random.randint(1,99))+ "&query=" +theme
+    # Cái headers là nó xác thực cái api key (maybe)
+    res = requests.get(url, headers={"Authorization": "IcYG6vQolq3GauSW2Y1DSB95fiIEajpP3zBaf0ocXSb5XIYwJNzBmka3"})
+    
+    if res.status_code == 200:
+        # Lấy url của hình từ response của trang web
+        img_url = res.json().get("photos")[0]["src"]["original"]
+        # Tạo request để lấy hình
+        img = requests.get(img_url)
+        # Tải và lưu ảnh về ở C:\Users\Admin
+        # Cái wb là chế độ khi tải cái mới thì nó sẽ thay thế cái cũ
+        with open("temp.jpg", "wb") as image:
+            image.write(img.content)
+    else:
+        print("Thay đổi hình nền không thành công!")
+
+    path = os.getcwd()+"\\temp.jpg"
+    # Cái này để thay đổi hình nền của máy
+    ctypes.windll.user32.SystemParametersInfoW(20,0,path,0)
+    speak("Hình nền đã được thay đổi!")
+
 # Tán gẫu
 def opening(name):
     speak("Chào " +name+ "! Tôi có thể giúp gì cho bạn?")
@@ -259,6 +291,9 @@ def ai():
 
         elif "thời tiết" in text:
             weather()
+
+        elif "nền" in text:
+            wallpaper()
 
         # Xử lý tán gẫu
         elif "tên" in text: 
