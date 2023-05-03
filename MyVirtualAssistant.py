@@ -12,6 +12,7 @@ import pywhatkit as pwt
 import random
 import ctypes
 from bs4 import BeautifulSoup
+import wikipedia
 
 # Tên bot
 botName = "Bảo"
@@ -68,19 +69,17 @@ def getTime():
     speak(datetime.now().strftime("%H:%M:%S"))
 
 def searching(text):
+    speak("Đang tìm kiếm kết quả!")
     search = text.split("kiếm", 1)[1]
-    speak("Đang tìm kiếm!")
     url = "https://www.google.com/search?q=" +search
     webbrowser.open(url, new=1)
     speak("Đã tìm kiếm thành công!")
 
 def openWebsite(text):
     speak("Đang truy cập trang web!")
-    try:
-        # Lấy dấu cách là không tìm được
-        search = text.split("cập ", 1)[1]
-
-    except:
+    # Lấy dấu cách là không tìm được
+    search = text.split("cập", 1)[1].strip()
+    if search == "":
         search = "google.com"
     
     url = "https://www." +search
@@ -150,7 +149,7 @@ def sendEmail():
         speak("Đã gửi email thành công!")
 
     else:
-        speak("Gửi email thành công!")
+        speak("Gửi email không thành công!")
 
 def weather():
     speak("Bạn muốn xem thời tiết ở địa điểm nào?")
@@ -158,6 +157,7 @@ def weather():
     if city == "...":
         city = "Thành phố Hồ Chí Minh"
 
+    speak("Đang tìm kiếm kết quả!")
     url = "http://api.openweathermap.org/data/2.5/weather?appid=fe8d8c65cf345889139d8e545f57819a&q=" +city+ "&units=metric"
     response = requests.get(url)
     data = response.json()
@@ -213,7 +213,7 @@ def newspaper():
     speak("Bạn muốn nghe tin tức theo chủ đề gì?")
     keyword = understand()
 
-    speak("Đang tìm kiếm!")
+    speak("Đang tìm kiếm mẫu tin mới nhất!")
     try:
         response = requests.get("https://tuoitre.vn/tim-kiem.htm?keywords=" +keyword)
         soup = BeautifulSoup(response.content, "html.parser")
@@ -233,6 +233,13 @@ def newspaper():
     except:
         speak("Không tìm thấy chủ đề hoặc tin phù hợp!")
 
+def wiki():
+    speak("Bạn muốn biết về gì?")
+    search = understand()
+    speak("Đang tìm kiếm kết quả!")
+    content = wikipedia.summary(search)
+    speak(GoogleTranslator(source="auto", target="vi").translate(content))
+
 # Tán gẫu
 def opening(name):
     speak("Chào " +name+ "! Tôi có thể giúp gì cho bạn?")
@@ -242,6 +249,19 @@ def stop():
 
 def noisy():
     speak("Tôi không nghe rõ! Bạn có thể nhắc lại được không?")
+
+def help():
+    speak("""Tôi có thể giúp bạn thực hiện các việc sau đây:
+    1. Chào hỏi
+    2. Hiển thị ngày, giờ
+    3. Mở trang web, ứng dụng
+    4. Tìm kiếm trên Google
+    5. Tìm nhạc trên Youtube
+    6. Gửi email
+    7. Dự báo thời tiết 
+    8. Thay đổi hình nền máy tính
+    9. Đọc báo hôm nay
+    10. Kể bạn biết về thế giới """)
 
 def baoNgu():
     speak("Tôi là " +botName+ ", một nô lệ của bạn!")
@@ -322,7 +342,13 @@ def ai():
         elif "báo" in text or "tin tức" in text:
             newspaper()
 
+        elif "định nghĩa" in text or "giải thích" in text:
+            wiki()
+
         # Xử lý tán gẫu
+        elif "giúp" in text or "chức năng" in text:
+            help()
+
         elif "tên" in text: 
             baoNgu()
 
