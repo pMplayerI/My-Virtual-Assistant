@@ -1,6 +1,7 @@
 import cv2
 import hamdatabase
 import numpy
+import os
 def chupanh():
     cam = cv2.VideoCapture(0)
     detector= cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
@@ -8,8 +9,10 @@ def chupanh():
     sampleNum=0
     # nhap ten va mat khau cua nguoi dung 
     ten=input("nhap ten: ")
-    pas= input("nhap mat khau: ")
-    hamdatabase.themnguoidung(ten,pas)
+    id = hamdatabase.themnguoidung(ten)
+    # tao folder
+    folder_path = f'./dataSet/user{id}'
+    os.mkdir(folder_path)
     while(True):
         ret, img = cam.read()
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
@@ -19,7 +22,7 @@ def chupanh():
             #gioi han anh
             sampleNum=sampleNum+1
             #luu vao folder
-            print(cv2.imwrite("nhandien/dataSet/User."+ten+'.'+ str(sampleNum) + ".jpg",gray))
+            cv2.imwrite(f"dataSet/user{id}/User."+str(id)+'.'+ str(sampleNum) + ".jpg",gray)
             # xem hinh anh camera luc nay
             # cv2.imshow('frame',img)
         # tg delay
