@@ -1,5 +1,5 @@
 
-from index import Ui_MainWindow
+from main import Ui_MainWindow
 
 class Main(Ui_MainWindow):
     # function

@@ -6,6 +6,7 @@ from xuly_main import Main
 from xuly_giaodienchinh import Main_chinh
 import hamchupanh,hamtrain,hamnhandien
 import time
+import MyVirtualAssistant
 
 class UI():
     # chuyen slide index -> dang  ky
@@ -34,6 +35,9 @@ class UI():
         time.sleep(5)
         self.dkUI_load.hide()
         self.main_chinhUI.show()
+    # bat dau chuong trinh 
+    def batdau(self):
+        MyVirtualAssistant.ai()
     def __init__(self):
         # xu ly giao dien index
         self.mainUI = QMainWindow()
@@ -66,7 +70,7 @@ class UI():
         # xu ly giao dien chinh
         self.main_chinhUI = QMainWindow()
         self.main_chinh = Main_chinh(self.main_chinhUI)
-        
+        self.main_chinh.pushButton.clicked.connect(lambda: self.batdau())
 
         
 if __name__ =="__main__":
