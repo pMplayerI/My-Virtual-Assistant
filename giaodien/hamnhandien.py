@@ -14,7 +14,8 @@ def nhandien():
     path='recognizer'
     #get the path of all the files in the folder
     trainPaths=[os.path.join(path,f) for f in os.listdir(path)] 
-    while(True):
+    bienlap = True
+    while(bienlap==True):
         for i in trainPaths:
             rec.read(i)
             #camera read
@@ -28,8 +29,9 @@ def nhandien():
                 profile=hamdatabase.getdatabase(id)
                 #set text to window
                 if(profile!=None):
-                    print("nhan dien thanh cong : \n")
+                    print("nhan dien thanh cong : ")
                     print(profile)
+                    bienlap = False
             if cv2.waitKey(1)==ord('q'):
                 break;
         

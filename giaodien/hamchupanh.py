@@ -2,13 +2,13 @@ import cv2
 import hamdatabase
 import numpy
 import os
-def chupanh():
+def chupanh(ten_):
     cam = cv2.VideoCapture(0)
     detector= cv2.CascadeClassifier(cv2.data.haarcascades + 'haarcascade_frontalface_default.xml')
     # bien so luong anh
     sampleNum=0
     # nhap ten va mat khau cua nguoi dung 
-    ten=input("nhap ten: ")
+    ten=ten_
     id = hamdatabase.themnguoidung(ten)
     # tao folder
     folder_path = f'./dataSet/user{id}'
