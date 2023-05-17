@@ -32,6 +32,7 @@ def nhandien():
                     print("nhan dien thanh cong : ")
                     print(profile)
                     bienlap = False
+                    return profile
             if cv2.waitKey(1)==ord('q'):
                 break;
         

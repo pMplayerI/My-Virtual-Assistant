@@ -17,7 +17,7 @@ class UI():
     def getuiDangnhap(self):
         self.mainUI.hide()
         self.dnUI.show()
-        hamnhandien.nhandien()
+        a = hamnhandien.nhandien()
         time.sleep(5)
         self.dnUI.hide()
         self.main_chinhUI.show()
@@ -37,7 +37,8 @@ class UI():
         self.main_chinhUI.show()
     # bat dau chuong trinh 
     def batdau(self):
-        MyVirtualAssistant.ai()
+        global a
+        MyVirtualAssistant.ai(a)
     def __init__(self):
         # xu ly giao dien index
         self.mainUI = QMainWindow()

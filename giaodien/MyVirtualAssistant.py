@@ -266,13 +266,13 @@ def wiki():
             speak("Tôi không thể định nghĩa được thuật ngữ này!")
 
 # AI
-def ai():
+def ai(name):
     # Phần mở đầu
-    speak("Xin chào, bạn tên là gì?")
-    name = understand()
-    if name == "...":
-        stop()
-    else:
+    # speak("Xin chào, bạn tên là gì?")
+    # name = understand()
+    # if name == "...":
+    #     stop()
+    # else:
         speak("Chào " +name+ "! Tôi có thể giúp gì cho bạn?")
         while True:
             # Cho chữ thường hết cho dễ
