@@ -7,7 +7,7 @@ from xuly_giaodienchinh import Main_chinh
 import hamchupanh,hamtrain,hamnhandien
 import time
 import MyVirtualAssistant
-
+a = []
 class UI():
     # chuyen slide index -> dang  ky
     def getuiDangky(self):
@@ -15,6 +15,7 @@ class UI():
         self.dkUI.show()
     # chuyen slide index -> dang  nhap
     def getuiDangnhap(self):
+        global a
         self.mainUI.hide()
         self.dnUI.show()
         a = hamnhandien.nhandien()

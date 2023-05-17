@@ -50,7 +50,6 @@ def speak(brain):
     playsound.playsound("voice.mp3", True)  
     # Không xóa là lỗi
     os.remove("voice.mp3")
-
 # Các chức năng chính
 def stop():
     speak("Hẹn gặp lại!")
@@ -267,22 +266,24 @@ def wiki():
 
 # AI
 def ai(name):
-    # Phần mở đầu
+        thucthi = True
+        name =  str(name[0][1])
+    # # Phần mở đầu
     # speak("Xin chào, bạn tên là gì?")
     # name = understand()
     # if name == "...":
     #     stop()
     # else:
+        
         speak("Chào " +name+ "! Tôi có thể giúp gì cho bạn?")
-        while True:
+        while thucthi == True:
             # Cho chữ thường hết cho dễ
             text = understand().lower()
-
             if "..." in text or "tạm biệt" in text:
                 # Ngừng chương trình nếu đang không thực hiện chức năng gì
-                stop()
+                speak("ket thuc chuong trinh")
+                thucthi = False
                 break
-
             elif "chào" in text:
                 hello(name)
             
