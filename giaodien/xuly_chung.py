@@ -40,6 +40,8 @@ class UI():
     def batdau(self):
         global a
         MyVirtualAssistant.ai(a)
+        app = QApplication([])
+        app.closeAllWindows()
     def __init__(self):
         # xu ly giao dien index
         self.mainUI = QMainWindow()
