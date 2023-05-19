@@ -1,8 +1,4 @@
 import cv2
-import numpy as np
-from PIL import Image
-import pickle
-import sqlite3
 import hamdatabase
 import os
 def nhandien():
@@ -10,7 +6,6 @@ def nhandien():
     cam=cv2.VideoCapture(0);
     rec=cv2.face.LBPHFaceRecognizer_create();
     id=0
-    so = 0
     path='recognizer'
     #get the path of all the files in the folder
     trainPaths=[os.path.join(path,f) for f in os.listdir(path)] 

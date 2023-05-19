@@ -28,9 +28,12 @@ class UI():
         self.mainUI.show()
     # xu ly dang ky chup anh va train -> cho dang ky -> giao dien chinh
     def xulydangky(self):
+        global a 
         self.dkUI.hide()
         self.dkUI_load.show()
         ten = self.main_Dangky.input_name.toPlainText()
+        a = [("1",str(ten))]
+        print(a)
         hamchupanh.chupanh(ten)
         hamtrain.train()
         time.sleep(5)
@@ -51,32 +54,22 @@ class UI():
         self.main_index.ptn_nhandien_dangky.clicked.connect(lambda: self.getuiDangky())
         #di den giao dien dang nhap
         self.main_index.ptn_nhandien_dangnhap.clicked.connect(lambda: self.getuiDangnhap())
-
-
- 
-
         # xu ly giao dien dang ky 
         self.dkUI = QMainWindow()
         self.main_Dangky = MainDK(self.dkUI)
-
         self.dkUI_load = QMainWindow()
         self.main_Dangky_load = MainDK_load(self.dkUI_load)
         # di den giao dien chinh - giao dien bot ao
         self.main_Dangky.ptn_dangky.clicked.connect(lambda: self.xulydangky())
         # tro ve giao dien index
         self.main_Dangky.ptn_pre.clicked.connect(lambda: self.getuiindex())
-        
         # xu ly giao dien dang nhap
         self.dnUI = QMainWindow()
         self.main_Dangnhap = MainDN(self.dnUI)
-
-
         # xu ly giao dien chinh
         self.main_chinhUI = QMainWindow()
         self.main_chinh = Main_chinh(self.main_chinhUI)
         self.main_chinh.pushButton.clicked.connect(lambda: self.batdau())
-
-        
 if __name__ =="__main__":
     app = QApplication([])
     ui = UI()

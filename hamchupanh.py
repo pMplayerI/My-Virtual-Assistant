@@ -1,6 +1,5 @@
 import cv2
 import hamdatabase
-import numpy
 import os
 def chupanh(ten_):
     cam = cv2.VideoCapture(0)
@@ -24,12 +23,8 @@ def chupanh(ten_):
             #luu vao folder
             cv2.imwrite(f"dataSet/user{id}/User."+str(id)+'.'+ str(sampleNum) + ".jpg",gray)
             # xem hinh anh camera luc nay
-            # cv2.imshow('frame',img)
-        # tg delay
-        if cv2.waitKey(100) & 0xFF == ord('q'):
-            break
-        # dung khi du 20 anh
-        elif sampleNum>20:
+        # dung khi du 100 anh
+        if sampleNum>100:
             break
     cam.release()
     cv2.destroyAllWindows()
