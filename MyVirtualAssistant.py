@@ -1,9 +1,9 @@
 import speech_recognition as sr
 import os
-import webbrowser
 import playsound
 from gtts import gTTS
 from datetime import date, datetime
+import webbrowser
 import smtplib
 import pyjokes
 from deep_translator import GoogleTranslator
@@ -50,10 +50,8 @@ def speak(brain):
     playsound.playsound("voice.mp3", True)  
     # Không xóa là lỗi
     os.remove("voice.mp3")
-# Các chức năng chính
-def stop():
-    speak("Hẹn gặp lại!")
 
+# Các chức năng chính
 def hello(name):
     dayTime = int(datetime.now().strftime("%H"))
     if 6 <= dayTime < 12:
@@ -107,7 +105,6 @@ def openApp():
 
         elif "code" in search:
             speak("Đang mở Visual Studio Code!")
-            # Có cái r đó máy t mới mở được
             os.startfile(r"C:\Users\Admin\AppData\Local\Programs\Microsoft VS Code\Code.exe")
             speak("Visual Studio Code đã được mở!")
 
@@ -204,12 +201,12 @@ def wallpaper():
     if query == "...":
         pass
     else:
-        # Tìm hình nền theo tiếng Việt nó cứ sao sao ấy
+        # Tìm hình nền theo tiếng Anh
         theme = GoogleTranslator(source="auto", target="en").translate(query)
         speak("Đang thay đổi hình nền!")
         try:
             url = "https://api.pexels.com/v1/search?per_page=1&page=" +str(random.randint(1,99))+ "&query=" +theme
-            # Cái headers là nó xác thực cái api key (maybe)
+            # Cái headers là nó xác thực cái api key
             res = requests.get(url, headers={"Authorization": "IcYG6vQolq3GauSW2Y1DSB95fiIEajpP3zBaf0ocXSb5XIYwJNzBmka3"}) 
             if res.status_code == 200:
                 # Lấy url của hình từ response của trang web
@@ -266,100 +263,93 @@ def wiki():
 
 # AI
 def ai(name):
-        thucthi = True
-        name =  str(name[0][1])
-    # # Phần mở đầu
-    # speak("Xin chào, bạn tên là gì?")
-    # name = understand()
-    # if name == "...":
-    #     stop()
-    # else:
-        
-        speak("Chào " +name+ "! Tôi có thể giúp gì cho bạn?")
-        while thucthi == True:
-            # Cho chữ thường hết cho dễ
-            text = understand().lower()
-            if "..." in text or "tạm biệt" in text:
-                # Ngừng chương trình nếu đang không thực hiện chức năng gì
-                speak("ket thuc chuong trinh")
-                thucthi = False
-                break
-            elif "chào" in text:
-                hello(name)
+    thucthi = True
+    name =  str(name[0][1])
+    speak("Chào " +name+ "! Tôi có thể giúp gì cho bạn?")
+    while thucthi == True:
+        # Cho chữ thường hết cho dễ
+        text = understand().lower()
             
-            elif "ngày" in text:
-                getToday()
+        if "..." in text or "tạm biệt" in text:
+            # Ngừng chương trình nếu đang không thực hiện chức năng gì
+            speak("Hẹn gặp lại!")
+            thucthi = False
+            break
 
-            elif "giờ" in text:
-                getTime()
+        elif "chào" in text:
+            hello(name)
+            
+        elif "ngày" in text:
+            getToday()
 
-            elif "tìm kiếm" in text:
-                searching()
+        elif "giờ" in text:
+            getTime()
 
-            elif "truy cập" in text:
-                openWebsite()                    
+        elif "tìm kiếm" in text:
+            searching()
 
-            elif "ứng dụng" in text:
-                openApp()                  
+        elif "truy cập" in text:
+            openWebsite()                    
 
-            elif "nhạc" in text:
-                playSong()                 
+        elif "ứng dụng" in text:
+            openApp()                  
+
+        elif "nhạc" in text:
+            playSong()                 
                 
-            elif "mail" in text:
-                sendEmail()                 
+        elif "mail" in text:
+            sendEmail()                 
 
-            elif "thời tiết" in text:
-                weather()
+        elif "thời tiết" in text:
+            weather()
                     
-            elif "nền" in text:
-                wallpaper()
+        elif "nền" in text:
+            wallpaper()
                     
-            elif "báo" in text or "tin tức" in text:
-                newspaper()                 
+        elif "báo" in text or "tin tức" in text:
+            newspaper()                 
 
-            elif "định nghĩa" in text or "giải thích" in text or "wiki" in text:
-                wiki()
+        elif "định nghĩa" in text or "giải thích" in text or "wiki" in text:
+            wiki()
                     
-            # Xử lý tán gẫu
-            elif "giúp" in text or "chức năng" in text:
-                speak("""Tôi có thể giúp bạn thực hiện các việc sau đây:
-                1. Chào hỏi
-                2. Hiển thị ngày, giờ
-                3. Mở trang web, ứng dụng
-                4. Tìm kiếm trên Google
-                5. Tìm nhạc trên Youtube
-                6. Gửi email
-                7. Dự báo thời tiết 
-                8. Thay đổi hình nền máy tính
-                9. Đọc báo hôm nay
-                10. Kể bạn biết về thế giới """)
+        # Xử lý tán gẫu
+        elif "giúp" in text or "chức năng" in text:
+            speak("""Tôi có thể giúp bạn thực hiện các việc sau đây:
+            1. Chào hỏi
+            2. Hiển thị ngày, giờ
+            3. Mở trang web, ứng dụng
+            4. Tìm kiếm trên Google
+            5. Tìm nhạc trên Youtube
+            6. Gửi email
+            7. Dự báo thời tiết 
+            8. Thay đổi hình nền máy tính
+            9. Đọc báo hôm nay
+            10. Kể bạn biết về thế giới """)
 
-            elif "tên" in text: 
-                speak("Tôi là MVA! Tôi có thể giúp gì cho bạn?")
+        elif "tên" in text: 
+            speak("Tôi là CHATBOT! Tôi có thể giúp gì cho bạn?")
 
-            elif "tuổi" in text: 
-                speak("Tôi chỉ là robot nên không có tuổi!")
+        elif "tuổi" in text: 
+            speak("Tôi chỉ là robot nên không có tuổi!")
 
-            elif "ở đâu" in text: 
-                speak("Tôi đang ở cùng với bạn!")
+        elif "ở đâu" in text: 
+            speak("Tôi đang ở cùng với bạn!")
 
-            elif "làm gì" in text:
-                speak("Tôi là một nô lệ của bạn!")
+        elif "làm gì" in text:
+            speak("Tôi là một nô lệ của bạn!")
 
-            elif "khỏe không" in text:
-                speak("Tôi khỏe, cảm ơn, còn bạn!")
+        elif "khỏe không" in text:
+            speak("Tôi khỏe, cảm ơn, còn bạn!")
 
-            elif "nghe" in text:
-                speak("Tôi vẫn đang lắng nghe!")
+        elif "nghe" in text:
+            speak("Tôi vẫn đang lắng nghe!")
 
-            elif "tốt" in text or "giỏi" in text or "cảm ơn" in text:
-                speak("Ok baby!")
+        elif "tốt" in text or "giỏi" in text or "cảm ơn" in text:
+            speak("Ok baby!")
 
-            elif "cười" in text:
-                speak(GoogleTranslator(source="auto", target="vi").translate(pyjokes.get_joke(language="en", category="all")))
+        elif "cười" in text:
+            speak(GoogleTranslator(source="auto", target="vi").translate(pyjokes.get_joke(language="en", category="all")))
 
-            # Hỏi gì khó vậy 3
-            else:
-                speak("Tôi không biết!")
-# Chạy chương trình
-# ai()
+        # Hỏi gì khó vậy
+        else:
+            speak("Tôi không biết!")

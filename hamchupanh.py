@@ -13,7 +13,7 @@ def chupanh(ten_):
     folder_path = f'./dataSet/user{id}'
     os.mkdir(folder_path)
     while(True):
-        ret, img = cam.read()
+        img = cam.read()
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         faces = detector.detectMultiScale(gray, 1.3, 5)
         for (x,y,w,h) in faces:

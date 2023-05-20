@@ -19,7 +19,7 @@ def nhandien():
             faces=faceDetect.detectMultiScale(gray,1.3,5);
             for(x,y,w,h) in faces:
                 cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
-                id,conf=rec.predict(gray[y:y+h,x:x+w])
+                id=rec.predict(gray[y:y+h,x:x+w])
                 id = int(id)
                 profile=hamdatabase.getdatabase(id)
                 #set text to window

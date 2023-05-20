@@ -45,7 +45,7 @@ class Ui_MainWindow(object):
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
-        self.label.setText(_translate("MainWindow", "NÔ LỆ PHƯƠNG"))
+        self.label.setText(_translate("MainWindow", "CHATBOT"))
         self.pushButton.setText(_translate("MainWindow", "bấm để trò chuyện"))
 
 
