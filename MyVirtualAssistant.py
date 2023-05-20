@@ -19,8 +19,6 @@ def listen():
     ear = sr.Recognizer()
     with sr.Microphone() as mic:
         print("Robot: Tôi đang lắng nghe!")
-        # Lọc tiếng ồn
-        ear.adjust_for_ambient_noise(mic)
         audio = ear.listen(mic)
     print("Robot: ...")
     try:
@@ -263,20 +261,18 @@ def wiki():
 
 # AI
 def ai(name):
-    thucthi = True
     name =  str(name[0][1])
     speak("Chào " +name+ "! Tôi có thể giúp gì cho bạn?")
-    while thucthi == True:
+    while True:
         # Cho chữ thường hết cho dễ
         text = understand().lower()
             
         if "..." in text or "tạm biệt" in text:
             # Ngừng chương trình nếu đang không thực hiện chức năng gì
             speak("Hẹn gặp lại!")
-            thucthi = False
             break
 
-        elif "chào" in text:
+        elif "chào" in text or "alo" in text:
             hello(name)
             
         elif "ngày" in text:

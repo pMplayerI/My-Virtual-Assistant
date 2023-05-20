@@ -22,6 +22,7 @@ class UI():
         time.sleep(5)
         self.dnUI.hide()
         self.main_chinhUI.show()
+        
     # chuyen slide dang ky -> index
     def getuiindex(self):
         self.dkUI.hide()
@@ -39,12 +40,14 @@ class UI():
         time.sleep(5)
         self.dkUI_load.hide()
         self.main_chinhUI.show()
+
     # bat dau chuong trinh 
     def batdau(self):
         global a
         MyVirtualAssistant.ai(a)
         app = QApplication([])
         app.closeAllWindows()
+
     def __init__(self):
         # xu ly giao dien index
         self.mainUI = QMainWindow()
@@ -70,6 +73,7 @@ class UI():
         self.main_chinhUI = QMainWindow()
         self.main_chinh = Main_chinh(self.main_chinhUI)
         self.main_chinh.pushButton.clicked.connect(lambda: self.batdau())
+        
 if __name__ =="__main__":
     app = QApplication([])
     ui = UI()

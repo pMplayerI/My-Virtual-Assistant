@@ -66,7 +66,7 @@ class Ui_MainWindow(object):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
         self.label.setText(_translate("MainWindow", "ĐĂNG KÝ"))
-        self.input_name.setPlainText(_translate("MainWindow", "Nhập tên\n"
+        self.input_name.setPlainText(_translate("MainWindow", "Nhập tên"
 ""))
         self.ptn_dangky.setText(_translate("MainWindow", "Chấp nhận"))
         self.ptn_pre.setText(_translate("MainWindow", "Trở lại"))

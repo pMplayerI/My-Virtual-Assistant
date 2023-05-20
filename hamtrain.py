@@ -9,7 +9,7 @@ def getImagesAndLabels(path):
     faces=[]
     IDs=[]
     for imagePath in imagePaths:
-        faceImg=Image.open(imagePath).convert('L');
+        faceImg=Image.open(imagePath).convert('L')
         faceNp=np.array(faceImg,'uint8')
         #split to get ID of the image
         ID=str(os.path.split(imagePath)[-1].split('.')[1])
